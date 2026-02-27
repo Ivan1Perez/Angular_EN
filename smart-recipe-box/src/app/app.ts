@@ -14,8 +14,8 @@ import { RECIPES } from './mock-recipes';
     <p class="description">{{ recipe().description }}</p>
 
     <div class="button-group">
-      <button class="btn btn-primary" (click)="logNextRecipe()">Next recipe</button>
-      <button class="btn btn-primary" (click)="logPrevRecipe()">Previous recipe</button>
+    <button class="btn btn-primary" (click)="logPrevRecipe()">Previous recipe</button>
+    <button class="btn btn-primary" (click)="logNextRecipe()">Next recipe</button>
     </div>
 
     <div class="count-section">
@@ -29,10 +29,8 @@ import { RECIPES } from './mock-recipes';
 
     <p class="ingredients-title">Ingredients:</p>
     <ul class="ingredients-list">
-      @for (ingredient of recipe().ingredients; track ingredient.text) {
-        <li>
-          {{ ingredient.quantity }} {{ ingredient.unit }} {{ ingredient.text }}
-        </li>
+      @for (ingredient of adjustedIngredients(); track ingredient.text) {
+        <li>{{ ingredient.text }}: {{ ingredient.quantity }} {{ ingredient.unit }}</li>
       }
     </ul>
   `,
@@ -41,7 +39,7 @@ import { RECIPES } from './mock-recipes';
 export class App {
   protected readonly title = signal('My Recipe Box');
 
-/*======================================
+  /*======================================
   NEXT-PREV RECIPE LOGIC
 ========================================*/
   private index = 0;
@@ -59,13 +57,21 @@ export class App {
     console.log('Previous recipe');
   }
 
-/*======================================
-  SERVICE COUNTER LOGIC
+  /*======================================
+  SERVINGS COUNTER LOGIC
 ========================================*/
-  protected readonly count = signal<number>(0);
+  protected readonly count = signal<number>(1);
 
-  protected readonly ingredientQuantity = computed(() => {
-    return this.recipe().ingredients[0].quantity * this.count();
+  protected readonly adjustedIngredients = computed(() => {
+    const servings = this.count();
+
+    const ingredientsPerServing = this.recipe().ingredients.map((i) => ({
+      ...i,
+      quantity: i.quantity * (servings),
+    }));
+    console.log(ingredientsPerServing);
+    
+    return ingredientsPerServing;
   });
 
   protected incrementServings(): void {
@@ -73,6 +79,6 @@ export class App {
   }
 
   protected decrementServings(): void {
-    this.count.update((current) => Math.max(0, current - 1));
+    this.count.update((current) => Math.max(1, current - 1));
   }
 }
