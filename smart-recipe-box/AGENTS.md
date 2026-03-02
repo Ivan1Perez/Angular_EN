@@ -10,6 +10,8 @@ This document provides guidelines for agents working on the Smart Recipe Box Ang
 - **Styling**: Tailwind CSS
 - **State Management**: Angular Signals
 
+---
+
 ## Build, Test, and Development Commands
 
 ### Development
@@ -36,13 +38,13 @@ npx vitest run --testNamePattern="test-name"
 # Run a specific test file
 npx vitest run src/app/app.spec.ts
 
-# Run tests in watch mode
+# Run tests in watch mode (interactive)
 npx vitest
 ```
 
 ### Linting & Formatting
-- Uses Prettier (see package.json for config: printWidth: 100, singleQuote: true)
-- TypeScript strict mode is enforced in tsconfig.json
+- Uses Prettier (see package.json: printWidth: 100, singleQuote: true)
+- TypeScript strict mode enforced in tsconfig.json
 
 ---
 
@@ -50,8 +52,8 @@ npx vitest
 
 ### General Principles
 - Write functional, maintainable, performant, and accessible code
-- Pass all AXE accessibility checks
-- Follow WCAG AA minimums (focus management, color contrast, ARIA attributes)
+- **MUST pass all AXE accessibility checks**
+- **MUST follow WCAG AA minimums** (focus management, color contrast, ARIA attributes)
 
 ### Components
 - Use standalone components by default
@@ -63,6 +65,7 @@ npx vitest
 - **DO NOT use `ngClass`** - use `class` bindings instead
 - **DO NOT use `ngStyle`** - use `style` bindings instead
 - Keep components small and focused on a single responsibility
+- Use paths relative to the component TS file for external templates/styles
 
 ### State Management (Angular Signals)
 - Use signals for local component state
@@ -75,26 +78,27 @@ npx vitest
 - Use native control flow (`@if`, `@for`, `@switch`) instead of `*ngIf`, `*ngFor`, `*ngSwitch`
 - Use the async pipe to handle observables
 - Do not assume globals like `new Date()` are available
-- Do not write arrow functions in templates (they are not supported)
+- Do not write arrow functions in templates (not supported)
 
 ### Services
 - Design services around a single responsibility
-- Use `providedIn: 'root'` option for singleton services
+- Use `providedIn: 'root'` for singleton services
 - Use the `inject()` function instead of constructor injection
 
 ### TypeScript
-- Strict mode is enabled in tsconfig.json
+- Strict mode enabled in tsconfig.json
 - Define clear interfaces and types for components, services, and models
 - Use type guards and union types for robust type checking
 - Implement proper error handling with RxJS operators (e.g., `catchError`)
-- Use typed forms (e.g., `FormGroup`, `FormControl`) for reactive forms
-- Compiler options enforced:
-  - `noImplicitOverride: true`
-  - `noPropertyAccessFromIndexSignature: true`
-  - `noImplicitReturns: true`
-  - `noFallthroughCasesInSwitch: true`
+- Use typed forms (`FormGroup`, `FormControl`) for reactive forms
 
-### Angular Compiler Options
+**Compiler options enforced:**
+- `noImplicitOverride: true`
+- `noPropertyAccessFromIndexSignature: true`
+- `noImplicitReturns: true`
+- `noFallthroughCasesInSwitch: true`
+
+**Angular Compiler Options:**
 - `strictInjectionParameters: true`
 - `strictInputAccessModifiers: true`
 - `strictTemplates: true`
@@ -107,8 +111,13 @@ npx vitest
 
 ### Imports
 - Use path aliases if configured
-- Group imports: Angular imports first, then third-party, then local
+- Group imports: Angular first, then third-party, then local
 - Use explicit imports (no barrel files unless necessary)
+
+### Styling (Tailwind CSS)
+- Use Tailwind utility classes for styling
+- Follow Tailwind best practices for responsive design
+- Use semantic HTML with appropriate Tailwind classes for accessibility
 
 ### Error Handling
 - Handle API errors with global interceptors for consistent error handling
@@ -117,15 +126,16 @@ npx vitest
 
 ### Security
 - Sanitize user inputs using Angular's built-in sanitization
-- Implement route guards for authentication and authorization
-- Use Angular's `HttpInterceptor` for CSRF protection and API authentication headers
-- Validate form inputs with Angular's reactive forms and custom validators
-- Follow Angular's security best practices (avoid direct DOM manipulation)
+- Implement route guards for authentication/authorization
+- Use Angular's `HttpInterceptor` for CSRF protection and API auth headers
+- Validate form inputs with reactive forms and custom validators
+- Avoid direct DOM manipulation
 
 ### Performance
 - Use lazy loading for routes to reduce initial bundle size
 - Optimize change detection with `OnPush` strategy and signals
 - Enable production builds for optimization
+- Use `trackBy` in `@for` loops for better rendering performance
 
 ### Testing
 - Write unit tests using Vitest
@@ -135,21 +145,18 @@ npx vitest
 
 ---
 
-## Copilot Instructions (from .github/copilot-instructions.md)
-
-The following requirements are inherited from the project's Copilot instructions:
-
-1. **Accessibility**: MUST pass all AXE checks and follow WCAG AA minimums
-2. **Components**: Keep small and focused; use signals and computed()
-3. **State**: Use signals; never mutate signals directly
-4. **Templates**: Use native control flow (@if, @for, @switch); avoid *ngIf/*ngFor
-5. **Services**: Single responsibility; use providedIn: 'root' and inject()
-
----
-
-## Architecture Notes
+## Architecture
 
 - Organized as standalone feature domains
 - Uses Angular's built-in dependency injection
 - Structure: smart (container) vs. presentational (dumb) components
 - Lazy loading for feature modules/routes
+
+---
+
+## Additional Guidelines
+
+- Use Angular CLI commands for generating boilerplate code
+- Document components and services with clear JSDoc comments
+- Keep code DRY by creating reusable utilities
+- Use signals consistently for state management
