@@ -6,8 +6,6 @@ import { Recipe } from "../models";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-recipe-detail',
   template: `
-    <h2 class="recipe-name">{{ recipe().text }}</h2>
-
     @if (recipe().image) {
       <img [src]="recipe().image" alt="{{ recipe().text }}" class="recipe-image" />
     }

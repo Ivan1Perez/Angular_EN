@@ -160,3 +160,92 @@ npx vitest
 - Document components and services with clear JSDoc comments
 - Keep code DRY by creating reusable utilities
 - Use signals consistently for state management
+
+
+## AI Tutor Context
+
+This project is being developed while following the official Angular AI Tutor course:
+https://angular.dev/ai/ai-tutor
+
+Agent Responsibilities:
+- Follow the structure and progression of the AI Tutor.
+- Before implementing changes, analyze the current project state and determine which step of the tutor we are on.
+- Do not skip steps unless explicitly instructed.
+- Prefer incremental changes aligned with the tutorial.
+- Explain reasoning before making structural refactors.
+- Keep solutions aligned with Angular 21 best practices.
+
+### Example of exercise explanation
+
+# 📘 Module 12 – Conditional Rendering with `@if`
+
+## 🧠 Concept Summary
+
+Sometimes you only want to show something when a piece of data meets a condition. In modern Angular templates you use the native `@if` control‑flow syntax to render or hide markup based on a boolean signal.
+
+> This replaces the old, deprecated `*ngIf` directive and works without importing any module.
+
+---
+
+## 📄 Generic Example
+
+**`my-toggle.component.html`**
+```html
+<button (click)="toggle()">Show details</button>
+
+@for (item of items) {
+  <div class="item">
+    <h3>{{ item.name }}</h3>
+    @if (item.showDetails) {
+      <p>{{ item.description }}</p>
+    }
+  </div>
+}
+```
+
+**`my-toggle.component.ts`**
+```typescript
+import { Component, signal } from '@angular/core';
+
+interface Item {
+  name: string;
+  description: string;
+  showDetails: boolean;
+}
+
+@Component({
+  selector: 'app-my-toggle',
+  standalone: true,
+  templateUrl: './my-toggle.component.html',
+})
+export class MyToggleComponent {
+  protected readonly items = signal<Item[]>([
+    { name: 'First', description: 'Details here', showDetails: false },
+    { name: 'Second', description: 'More info', showDetails: true },
+  ]);
+
+  protected toggle(): void {
+    this.items.update(list =>
+      list.map(i => ({ ...i, showDetails: !i.showDetails }))
+    );
+  }
+}
+```
+
+> Notice how `@if` only renders the inner paragraph when the condition is true. No extra imports are required.
+
+---
+
+## 🛠️ Project Exercise: Favorite Indicator
+
+### Objective
+
+Add a visual marker next to each recipe's name in the recipe list whenever that recipe's `isFavorite` flag is `true`. This will require using the `@if` template syntax inside the `RecipeList` component.
+
+### Expected Outcome
+
+In the web preview, when you click through recipes or load the list, recipes marked as favorites in your mock data should display a star (**★**) or similar icon/text beside their title. Non‑favorites should show nothing extra.
+
+---
+
+Give it a shot! Let me know when you've finished or if you'd like a hint.

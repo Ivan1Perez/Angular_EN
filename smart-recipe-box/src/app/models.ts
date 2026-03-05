@@ -3,6 +3,7 @@ export interface Recipe {
     description: string,
     ingredients: Ingredient[];
     image?: string;
+    isFavorite?: boolean;
 }
 
 export interface Ingredient {

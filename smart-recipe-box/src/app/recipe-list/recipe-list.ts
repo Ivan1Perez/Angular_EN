@@ -14,6 +14,7 @@ import { RecipeDetail } from "../recipe-detail/recipe-detail";
       <button class="btn btn-primary" (click)="nextRecipe()">Next recipe</button>
       <button class="btn btn-random-recipe" (click)="randomRecipe()">Random recipe</button>
     </div>
+    <h2 class="recipe-name"><span class="favorite-icon">@if (recipe().isFavorite) { ★ }</span>{{ recipe().text }} <span class="favorite-icon">@if (recipe().isFavorite) { ★ }</span> </h2>
     <app-recipe-detail [recipe]="recipe()" />
   `,
   styleUrl: './recipe-list.css'
