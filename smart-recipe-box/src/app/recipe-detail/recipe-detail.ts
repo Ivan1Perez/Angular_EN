@@ -1,8 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal } from "@angular/core";
+import { FormsModule } from "@angular/forms";
 import { Recipe } from "../models";
 
 @Component({
   standalone: true,
+  imports: [FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-recipe-detail',
   template: `
@@ -16,7 +18,7 @@ import { Recipe } from "../models";
       <span class="count-label">Servings</span>
       <div class="count-buttons">
         <button class="btn-count" (click)="decrementServings()">−</button>
-        <span class="count-value">{{ count() }}</span>
+        <input type="number" class="count-value editable-count" [(ngModel)]="count" />
         <button class="btn-count" (click)="incrementServings()">+</button>
       </div>
     </div>
