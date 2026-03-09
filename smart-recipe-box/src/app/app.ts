@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { RecipeList } from './recipe-list/recipe-list';
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RecipeList],
+  imports: [RouterOutlet, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <h1 class="title">{{ title() }}</h1>
-    <app-recipe-list />
+    <h1 class="title" routerLink="/">{{ title() }}</h1>
+    <router-outlet></router-outlet>
   `,
   styleUrl: './app.css',
 })

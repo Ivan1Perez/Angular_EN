@@ -1,6 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, input, signal } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 import { Recipe } from "../models";
+import { ActivatedRoute } from "@angular/router";
+import { RecipeService } from "../recipe-service/recipe-service";
 
 @Component({
   standalone: true,
@@ -8,12 +10,12 @@ import { Recipe } from "../models";
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-recipe-detail',
   template: `
-    @if (recipe().image) {
-      <img [src]="recipe().image" alt="{{ recipe().text }}" class="recipe-image" />
+    @if (currentRecipe().image) {
+      <img [src]="currentRecipe().image" alt="{{ currentRecipe().text }}" class="recipe-image" />
     }
 
-    <p class="description">{{ recipe().description }}</p>
-
+    <p class="description">{{ currentRecipe().description }}</p>
+    
     <div class="count-section">
       <span class="count-label">Servings</span>
       <div class="count-buttons">
@@ -34,11 +36,19 @@ import { Recipe } from "../models";
 })
 export class RecipeDetail {
   public readonly recipe = input.required<Recipe>();
+  private route = inject(ActivatedRoute);
+  private recipeService = inject(RecipeService);
+
   protected readonly count = signal<number>(1);
+
+  protected currentRecipe = computed(() => {
+    const id = Number(this.route.snapshot.paramMap.get('id'));
+    return this.recipeService.getRecipeById(id) ?? this.recipe();
+  });
 
   public readonly adjustedIngredients = computed(() => {
     const servings = this.count();
-    const recipe = this.recipe();
+    const recipe = this.currentRecipe();
     const ingredientsPerServing = recipe.ingredients.map((i) => ({
       ...i,
       quantity: i.quantity * servings,

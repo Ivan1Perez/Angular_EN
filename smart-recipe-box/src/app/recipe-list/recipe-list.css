@@ -1,6 +1,11 @@
 :host {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   margin-bottom: 40px;
 }
+
 
 .button-group {
   display: grid;
@@ -70,3 +75,35 @@
   font-size: 1.25rem;
 }
 
+.recipe-image {
+  width: 100%;
+  max-width: 400px;
+  height: 300px;
+  object-fit: cover;
+  object-position: center bottom;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.description {
+  font-size: 1.1rem;
+  color: #555;
+  line-height: 1.6;
+}
+
+.view-details-link {
+  display: inline-block;
+  margin-top: 1rem;
+  padding: 0.75rem 1.5rem;
+  background-color: #3b82f6;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  font-weight: 500;
+  transition: background-color 0.2s;
+}
+
+.view-details-link:hover {
+  background-color: #2563eb;
+}

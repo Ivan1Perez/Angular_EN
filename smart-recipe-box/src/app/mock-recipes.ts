@@ -1,6 +1,7 @@
 import { Recipe } from './models';
 export const RECIPES: Recipe[] = [
   { 
+    id: 1,
     text: 'CarrotCake',
     description: 'A delicious carrot cake recipe with cream cheese frosting.',
     image: 'https://images.unsplash.com/photo-1621303837174-89787a7d4729?w=400&h=300&fit=crop',
@@ -17,6 +18,7 @@ export const RECIPES: Recipe[] = [
     ]
   },
 { 
+    id: 2,
     text: 'Lentejas de la iaia',
     description: 'A traditional Spanish lentil stew with vegetables and spices.',
     image: 'https://plus.unsplash.com/premium_photo-1712678665743-15e3833da37e?q=80&w=687&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?w=400&h=300&fit=crop',
@@ -33,6 +35,7 @@ export const RECIPES: Recipe[] = [
     ]
   },
 { 
+    id: 3,
     text: 'Pasta Carbonara',
     description: 'Classic Italian pasta with eggs, cheese, pancetta, and black pepper.',
     image: 'https://images.unsplash.com/photo-1612874742237-6526221588e3?w=400&h=300&fit=crop',
@@ -47,6 +50,7 @@ export const RECIPES: Recipe[] = [
     ]
   },
 { 
+    id: 4,
     text: 'Chicken Curry',
     description: 'Aromatic curry with tender chicken pieces in a rich spiced sauce.',
     image: 'https://images.unsplash.com/photo-1603894584373-5ac82b2ae398?w=400&h=300&fit=crop',
@@ -63,6 +67,7 @@ export const RECIPES: Recipe[] = [
     ]
   },
 { 
+    id: 5,
     text: 'Greek Salad',
     description: 'Fresh Mediterranean salad with tomatoes, cucumbers, olives, and feta cheese.',
     image: 'https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&h=300&fit=crop',

@@ -1,11 +1,10 @@
-import { ChangeDetectionStrategy, Component, signal } from "@angular/core";
-import { Recipe } from "../models";
-import { RECIPES } from "../mock-recipes";
-import { RecipeDetail } from "../recipe-detail/recipe-detail";
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { RecipeService } from '../recipe-service/recipe-service';
+import { RouterLink } from '@angular/router';
 
 @Component({
   standalone: true,
-  imports: [RecipeDetail],
+  imports: [RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-recipe-list',
   template: `
@@ -14,34 +13,46 @@ import { RecipeDetail } from "../recipe-detail/recipe-detail";
       <button class="btn btn-primary" (click)="nextRecipe()">Next recipe</button>
       <button class="btn btn-random-recipe" (click)="randomRecipe()">Random recipe</button>
     </div>
-    <h2 class="recipe-name"><span class="favorite-icon">@if (recipe().isFavorite) { ★ }</span>{{ recipe().text }} <span class="favorite-icon">@if (recipe().isFavorite) { ★ }</span> </h2>
-    <app-recipe-detail [recipe]="recipe()" />
-  `,
-  styleUrl: './recipe-list.css'
-})
+    <h2 class="recipe-name">
+      <span class="favorite-icon">
+        @if (currentRecipe().isFavorite) {
+          ★
+        }
+      </span>
+      {{ currentRecipe().text }}
+      <span class="favorite-icon">
+        @if (currentRecipe().isFavorite) {
+          ★
+        }
+      </span>
+    </h2>
+    
+    @if (currentRecipe().image) {
+      <img [src]="currentRecipe().image" alt="{{ currentRecipe().text }}" class="recipe-image" />
+    }
 
+    <p class="description">{{ currentRecipe().description }}</p>
+
+    <a [routerLink]="['/recipe', currentRecipe().id]" class="view-details-link">View details</a>
+    
+  `,
+  styleUrl: './recipe-list.css',
+})
 export class RecipeList {
+  private recipeService = inject(RecipeService);
+  protected currentRecipe = computed(() => this.recipeService.getFirstRecipe());
+
   /*======================================
   NEXT-PREV-RANDOM RECIPE LOGIC
 ========================================*/
-  private index = 0;
-  protected readonly recipe = signal<Recipe>(RECIPES[0]);
 
   protected nextRecipe(): void {
-    this.index = (this.index + 1) % RECIPES.length;
-    this.recipe.set(RECIPES[this.index]);
-    console.log('Next recipe');
+    this.recipeService.nextRecipe();
   }
-
   protected prevRecipe(): void {
-    this.index = (this.index - 1 + RECIPES.length) % RECIPES.length;
-    this.recipe.set(RECIPES[this.index]);
-    console.log('Previous recipe');
+    this.recipeService.prevRecipe();
   }
-
   protected randomRecipe(): void {
-    this.index = Math.floor(Math.random() * RECIPES.length);
-    this.recipe.set(RECIPES[this.index]);
-    console.log('Random recipe: ', this.recipe().text);
+    this.recipeService.randomRecipe();
   }
 }
