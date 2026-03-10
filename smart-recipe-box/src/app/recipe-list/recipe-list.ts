@@ -1,17 +1,18 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
 import { RecipeService } from '../recipe-service/recipe-service';
 import { RouterLink } from '@angular/router';
 
 @Component({
   standalone: true,
-  imports: [RouterLink],
+  imports: [MatButtonModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-recipe-list',
   template: `
     <div class="button-group">
-      <button class="btn btn-primary" (click)="prevRecipe()">Previous recipe</button>
-      <button class="btn btn-primary" (click)="nextRecipe()">Next recipe</button>
-      <button class="btn btn-random-recipe" (click)="randomRecipe()">Random recipe</button>
+      <button mat-flat-button color="primary" (click)="prevRecipe()">Previous recipe</button>
+      <button mat-flat-button color="primary" (click)="nextRecipe()">Next recipe</button>
+      <button mat-flat-button color="accent" (click)="randomRecipe()">Random recipe</button>
     </div>
     <h2 class="recipe-name">
       <span class="favorite-icon">
@@ -44,7 +45,7 @@ export class RecipeList {
 
   /*======================================
   NEXT-PREV-RANDOM RECIPE LOGIC
-========================================*/
+  ========================================*/
 
   protected nextRecipe(): void {
     this.recipeService.nextRecipe();

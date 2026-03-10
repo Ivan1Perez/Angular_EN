@@ -1,12 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from "@angular/core";
-import { FormsModule } from "@angular/forms";
-import { Recipe } from "../models";
-import { ActivatedRoute } from "@angular/router";
+import { ChangeDetectionStrategy, Component, computed, inject, input } from "@angular/core";
+import { toSignal } from "@angular/core/rxjs-interop";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { RecipeService } from "../recipe-service/recipe-service";
 
 @Component({
   standalone: true,
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-recipe-detail',
   template: `
@@ -20,7 +19,7 @@ import { RecipeService } from "../recipe-service/recipe-service";
       <span class="count-label">Servings</span>
       <div class="count-buttons">
         <button class="btn-count" (click)="decrementServings()">−</button>
-        <input type="number" class="count-value editable-count" [(ngModel)]="count" />
+        <input type="number" class="count-value editable-count" [formControl]="countControl" />
         <button class="btn-count" (click)="incrementServings()">+</button>
       </div>
     </div>
@@ -35,33 +34,31 @@ import { RecipeService } from "../recipe-service/recipe-service";
   styleUrl: './recipe-detail.css',
 })
 export class RecipeDetail {
-  public readonly recipe = input.required<Recipe>();
-  private route = inject(ActivatedRoute);
+  public readonly id = input.required<number>();
   private recipeService = inject(RecipeService);
 
-  protected readonly count = signal<number>(1);
+  protected readonly countControl = new FormControl(1, { nonNullable: true });
+  protected readonly count = toSignal(this.countControl.valueChanges, { initialValue: 1 });
 
   protected currentRecipe = computed(() => {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    return this.recipeService.getRecipeById(id) ?? this.recipe();
+    return this.recipeService.getRecipeById(this.id()) ?? this.recipeService.getFirstRecipe();
   });
 
-  public readonly adjustedIngredients = computed(() => {
-    const servings = this.count();
+  protected adjustedIngredients = computed(() => {
+    const servings = this.count() ?? 1;
     const recipe = this.currentRecipe();
     const ingredientsPerServing = recipe.ingredients.map((i) => ({
       ...i,
       quantity: i.quantity * servings,
     }));
-    console.log(ingredientsPerServing);
     return ingredientsPerServing;
   });
 
   protected incrementServings(): void {
-    this.count.update((current) => current + 1);
+    this.countControl.setValue(this.countControl.value + 1);
   }
 
   protected decrementServings(): void {
-    this.count.update((current) => Math.max(1, current - 1));
+    this.countControl.setValue(Math.max(1, this.countControl.value - 1));
   }
 }
